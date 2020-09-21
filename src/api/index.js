@@ -21,6 +21,8 @@ const wallet=new Wallet()
 const pubsub=new PubSub({blockchain,transactionPool})
 const transactionMiner=new TransactionMiner({blockchain,transactionPool,wallet,pubsub})
 
+const isDevelopment=process.env.ENV==='development'
+
 setTimeout(()=>{pubsub.broadcastChain()},1000)
 app.get('/api/blocks',(req,res)=>{
    
@@ -91,6 +93,8 @@ const syncDataWithRoot=()=>{
     })
 }
 
+if(isDevelopment)
+{
 const fooWallet=new Wallet()
 const barWallet=new Wallet()
 
@@ -130,13 +134,13 @@ const fooWalletAction=()=>generateTransactionWithWallet({
      transactionMiner.mineTransactions();
  }       
 
-
+}
 let PEER_PORT;
 
 if(process.env.GENERATE_PEER_PORT==='true')
 PEER_PORT=DEFAULT_PORT+Math.ceil(Math.random()*1000)
 
-const PORT=PEER_PORT||DEFAULT_PORT
+const PORT=process.env.PORT||PEER_PORT||DEFAULT_PORT
 
 app.listen(PORT,()=>{
     console.log(`listening on port ${PORT }`
